@@ -41,6 +41,13 @@ class TerminalHandler:
   def flush(self):
     self.output.flush()
   
+  def writeAtXY(self, string, x, y, bgcolour="reset"):
+    self.resetColour()    
+    self.setCursorPos(x, y)
+    self.setColour(bgcolour)
+    
+    self.output.write(string)
+
   def initDisplay(self):
     self.resetColour()
     self.clearDisplay()
@@ -54,11 +61,7 @@ class TerminalHandler:
     self.flush()
   
   def drawPixel(self, x, y, colour):
-    self.resetColour()
-    self.setCursorPos(x, y)
-    self.setColour(colour)
-
-    self.output.write("  ")
+    self.writeAtXY(self.blankOut, x, y, colour)
   
   def writeState(self, state):
     # state = { (x, y): "colourName" }
