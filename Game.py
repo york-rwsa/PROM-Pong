@@ -2,10 +2,10 @@ import TerminalHandler
 import constants
 
 class Game:
-  def __init__ (self):
+  def __init__ (self, debug=False):
     self.output = TerminalHandler.TerminalHandler()
     self.objects = []
-    self.debug = True
+    self.debug = debug
 
   def addObject (self, obj):
     self.objects.append(obj)
