@@ -22,6 +22,6 @@ while(True):
   cur_time = time.time()
 
   game.update(cur_time - prev_time)
-  game.render()
+  game.render(cur_time - prev_time)
 
   prev_time = cur_time
