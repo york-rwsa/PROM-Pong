@@ -15,6 +15,9 @@ class FrequentTask:
 
   def execute(self, timeDelta):
     self.function(timeDelta, *self.args)
+  
+  def __lt__(self, other):
+    return self.nextRun < other.nextRun
 
 class TaskList:
   def __init__(self):

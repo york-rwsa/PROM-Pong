@@ -1,3 +1,5 @@
+import math
+
 class Vector:
   def __init__(self, x, y):
     self.x = x
@@ -22,5 +24,9 @@ class Vector:
   def mag(self):
     return (self.x ** 2 + self.y ** 2) ** 0.5
   
-  def unit_vector():
+  def unit_vector(self):
     return self / self.mag()
+
+  @staticmethod
+  def createUnitVector(angle):
+    return Vector(math.cos(angle), math.sin(angle))

@@ -10,9 +10,9 @@ class Bat(GameObject):
   def update(self, timeDiff):
     # controller logic would go here
     # just go up and down in one spot
-    self.pos.y += timeDiff * self.speed * self.direction
+    self.pos.y += timeDiff * self.speed * self.direction 
 
     if self.pos.y + self.size.y >= constants.DISPLAY_HEIGHT:
       self.direction = -1
-    elif self.pos.y <= 0:
+    elif self.pos.y <= 0 + constants.DISPLAY_OFFSET:
       self.direction = 1
