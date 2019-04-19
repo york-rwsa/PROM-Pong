@@ -41,3 +41,6 @@ class Number:
       return False
     
     return self.value // 10 ** n % 10
+  
+  def update(self, delta):
+    pass

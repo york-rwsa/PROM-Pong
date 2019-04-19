@@ -17,8 +17,8 @@ edges = [
 
 balls = [
   Ball(10, 20, 10, 'red', bats + edges, 65, 2, 1),
-  Ball(18, 10, 15, 'blue', bats + edges, 120, 2, 1),
-  Ball(20, 15, 20, 'green', bats + edges, 100, 2, 1)
+  Ball(18, 10, 15, 'blue', bats + edges, 120, 4, 1),
+  Ball(20, 15, 20, 'green', bats + edges, 100, 4, 2)
 ]
 
 game = Game(True)

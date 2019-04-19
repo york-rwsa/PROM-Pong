@@ -11,9 +11,11 @@ class Game:
   def addObject (self, obj):
     self.objects.append(obj)
 
-  def render (self, delta):
-    state = {}
+  def addObjects (self, objs):
+    for obj in objs:
+      self.addObject(obj)
 
+  def render (self, delta, state={}):
     for obj in self.objects:
       state.update(obj.render())
     
