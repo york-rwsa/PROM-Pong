@@ -2,11 +2,11 @@ from Vector import Vector
 import constants
 
 class GameObject:
-  def __init__ (self):
-    self.pos = Vector(0, 0)
-    self.size = Vector(0, 0)
+  def __init__ (self, x=0, y=0, width=1, height=1, colour="white"):
+    self.pos = Vector(x, y)
+    self.size = Vector(width, height)
     self.velocity = Vector(0, 0)
-    self.colour = "white"
+    self.colour = colour
   
   def render (self):
     # self.pos defined as the top left corner

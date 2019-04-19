@@ -1,5 +1,6 @@
 import TerminalHandler
 import constants
+import Timeout
 
 class Game:
   def __init__ (self, debug=False):
@@ -27,7 +28,15 @@ class Game:
           "{} {},{}; ".format(obj.colour,int(round(obj.pos.x)), int(round(obj.pos.y)))
         )
 
-  
   def update (self, timeDiff):
     for obj in self.objects:
       obj.update(timeDiff)
+  
+  def start (self, updateFreq, renderFreq):
+    timer = Timeout.TaskList()
+
+    timer.addTask(Timeout.FrequentTask(lambda x: self.update(x), updateFreq))
+    timer.addTask(Timeout.FrequentTask(lambda x: self.render(x), renderFreq))
+
+    while(True):
+      timer.executeNextTask()
