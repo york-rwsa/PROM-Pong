@@ -17,35 +17,35 @@ class TerminalHandler:
     self.previousState = {}
     self.output = output_device
     self.blankOut = " "
-
+    self.escape = '\x1b'
     self.initDisplay()
-  
+
   def hideCursor (self):
-    self.output.write(u"\u001b[?25l")
-  
+    self.output.write(self.escape + "[?25l")
+
   def showCursor (self):
-    self.output.write(u"\u001b[?25h")
-  
+    self.output.write(self.escape + "[?25h")
+
   def clearDisplay (self):
-    self.output.write(u"\u001b[2J")
-  
+    self.output.write(self.escape + "[2J")
+
   def setCursorPos(self, x, y):
-    self.output.write(u"\u001b[{};{}f".format(y, x))
-  
+    self.output.write(self.escape + "[{};{}f".format(y, x))
+
   def setColour(self, colour):
-    self.output.write(u"\u001b[{}m".format(COLOURS[colour]))
+    self.output.write(self.escape + "[{}m".format(COLOURS[colour]))
 
   def resetColour(self):
-    self.output.write(u"\u001b[0m")
-  
+    self.output.write(self.escape + "[0m")
+
   def flush(self):
     self.output.flush()
-  
+
   def writeAtXY(self, string, x, y, bgcolour="reset"):
-    self.resetColour()    
+    self.resetColour()
     self.setCursorPos(x, y)
     self.setColour(bgcolour)
-    
+
     self.output.write(string)
 
   def initDisplay(self):
@@ -59,22 +59,22 @@ class TerminalHandler:
     self.clearDisplay()
     self.setCursorPos(0, 0)
     self.flush()
-  
+
   def drawPixel(self, x, y, colour):
     self.writeAtXY(self.blankOut, x, y, colour)
-  
+
   def writeState(self, state):
     # state = { (x, y): "colourName" }
-    # removed is the set of Vecors that are no longer displayed 
-    
+    # removed is the set of Vecors that are no longer displayed
+
     removed = set(self.previousState.keys()) - set(state.keys())
     updated = { coors for (coors, colour) in state.items() if colour != self.previousState.get(coors) }
 
     for (x, y) in removed:
       self.drawPixel(x, y, 'reset')
-    
+
     for (x, y) in updated:
       self.drawPixel(x, y, state[(x, y)])
-  
+
     self.previousState = state
     self.flush()
