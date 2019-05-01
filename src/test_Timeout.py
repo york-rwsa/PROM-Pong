@@ -27,4 +27,4 @@ timer.addTask(Timeout.FrequentTask(lambda x: game.update(x), 100))
 timer.addTask(Timeout.FrequentTask(lambda x: game.render(x), 60))
 
 while(True):
-  timer.executeNextTask()
+    timer.executeNextTask()

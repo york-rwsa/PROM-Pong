@@ -1,6 +1,7 @@
 from serial import Serial
 import time
 
+
 class SerialHandler:
     def __init__(self, port, baudRate):
         self.serialPort = Serial(port, baudRate)

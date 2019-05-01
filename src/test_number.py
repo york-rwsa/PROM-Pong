@@ -13,4 +13,4 @@ game.addObject(Number(123, 3, 10, 'blue'))
 game.render(0)
 
 while(True):
-  pass
+    pass

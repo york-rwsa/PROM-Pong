@@ -19,9 +19,9 @@ game.addObject(obj2)
 
 prev_time = time.time()
 while(True):
-  cur_time = time.time()
+    cur_time = time.time()
 
-  game.update(cur_time - prev_time)
-  game.render(cur_time - prev_time)
+    game.update(cur_time - prev_time)
+    game.render(cur_time - prev_time)
 
-  prev_time = cur_time
+    prev_time = cur_time

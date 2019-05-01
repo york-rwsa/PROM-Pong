@@ -21,7 +21,8 @@ class Pong(Game):
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(10, GPIO.FALLING, callback=self.handleControllerInterrupt)
+        GPIO.add_event_detect(
+            10, GPIO.FALLING, callback=self.handleControllerInterrupt)
 
         self.scoreLeft = Number(0, 29, 1, "red")
         self.scoreRight = Number(0, 49, 1, "blue")
@@ -38,11 +39,13 @@ class Pong(Game):
 
         self.edges = [
             GameObject(0, -1, constants.PONG_WIDTH, 1, "reset"),
-            GameObject(0, constants.PONG_HEIGHT + 1, constants.PONG_WIDTH, 1, "reset"),
+            GameObject(0, constants.PONG_HEIGHT + 1,
+                       constants.PONG_WIDTH, 1, "reset"),
         ]
 
         self.ball = Ball(
-            10, 20, 10, "red", self.edges + [self.batLeft, self.batRight], 25, 1, 1
+            10, 20, 10, "red", self.edges +
+            [self.batLeft, self.batRight], 25, 1, 1
         )
 
         self.addObjects(
@@ -75,7 +78,8 @@ class Pong(Game):
             {
                 (40, y): "blue"
                 for (y, draw) in zip(
-                    range(constants.PONG_HEIGHT), cycle([False, False, True, True])
+                    range(constants.PONG_HEIGHT), cycle(
+                        [False, False, True, True])
                 )
                 if draw
             }

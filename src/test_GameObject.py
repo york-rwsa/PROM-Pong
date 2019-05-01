@@ -16,4 +16,4 @@ obj.pos.setcoors(4, 6)
 handler.writeState(obj.render())
 
 while(True):
-  pass
+    pass
