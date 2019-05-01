@@ -9,6 +9,7 @@ from ControllerHandler import ControllerHandler
 import random
 import constants
 import smbus
+import RPi.GPIO as GPIO
 
 
 class Pong(Game):
@@ -16,6 +17,11 @@ class Pong(Game):
         super().__init__(debug)
 
         self.bus = smbus.SMBus(1)
+        self.bus.write_byte(constants.BAT_BUTTONS_I2C_ADDRESS, 0xFF)
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(10, GPIO.FALLING, callback=self.handleControllerInterrupt)
 
         self.scoreLeft = Number(0, 29, 1, "red")
         self.scoreRight = Number(0, 49, 1, "blue")
@@ -76,3 +82,19 @@ class Pong(Game):
         )
 
         super().render(delta, state)
+
+    def handleControllerInterrupt(self, channel):
+        input = self.bus.read_byte(constants.BAT_BUTTONS_I2C_ADDRESS)
+
+        if input == 255:
+            return
+
+        if input & constants.RIGHT_BAT_TOP_BUTTON == 0:
+            self.rightController.topButton = True
+        if input & constants.RIGHT_BAT_BOT_BUTTON == 0:
+            self.rightController.bottomButton = True
+
+        if input & constants.LEFT_BAT_TOP_BUTTON == 0:
+            self.leftController.topButton = True
+        if input & constants.LEFT_BAT_BOT_BUTTON == 0:
+            self.leftController.bottomButton = True

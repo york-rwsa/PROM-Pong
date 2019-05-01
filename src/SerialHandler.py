@@ -9,7 +9,6 @@ class SerialHandler:
         if self.serialPort.isOpen() == False:
             self.serialPort.open()
 
-        print(repr(data))
         self.serialPort.write(bytes(data, 'utf-8'))
 
     def close(self):

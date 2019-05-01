@@ -24,3 +24,8 @@ class Bat(GameObject):
       self.pos.y = constants.DISPLAY_HEIGHT - self.size.y
     elif self.pos.y <= 0:
       self.pos.y = 0
+
+    if self.controller.getTopButton():
+        print('top')
+    if self.controller.getBottomButton():
+        print('bottom')

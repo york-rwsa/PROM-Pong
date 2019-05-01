@@ -4,6 +4,9 @@ class ControllerHandler:
         self.address = adcAddress
         self.adcCmdCode = adcCmdCode
 
+        self.topButton = False
+        self.bottomButton = False
+
     def getPositionPercent(self):
         return self.readAdc()
 
@@ -15,3 +18,15 @@ class ControllerHandler:
         scaledValue = (rawValue / 4092.0)
 
         return scaledValue
+
+    def getTopButton(self):
+        tmp = self.topButton
+        self.topButton = False
+
+        return tmp
+
+    def getBottomButton(self):
+        tmp = self.bottomButton
+        self.bottomButton = False
+
+        return tmp
