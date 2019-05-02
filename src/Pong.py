@@ -53,23 +53,60 @@ class Pong(Game):
             + self.edges
         )
 
-        self.resetBall()
+        self.ball.serving = 'right'
+        self.serves = 0
+
+        # self.resetBall()
 
     def resetBall(self):
         self.ball.pos.setxy(40, 12)
         self.ball.velocity = Vector.createUnitVector(random.randint(0, 360))
 
+    def score(self, scorer):
+        if scorer == 'left':
+            self.scoreLeft.value += 1
+        elif scorer == 'right':
+            self.scoreRight.value += 1
+
+        self.ball.serving = 'right' if (self.serves < 5) else 'left'
+        self.leftController.getBottomButton()
+        self.rightController.getBottomButton()
+
+    def serve(self):
+        if self.ball.serving == 'left':
+            self.ball.velocity = Vector.createUnitVector(random.randint(30, 150))
+        elif self.ball.serving == 'right':
+            self.ball.velocity = Vector.createUnitVector(-random.randint(30, 150))
+
+        self.ball.serving = None
+        self.serves += 1
+
     def update(self, delta):
+        super().update(delta)
         if self.ball.pos.x < 0:
             # ball dead player two gains point
-            self.scoreRight.value += 1
-            self.resetBall()
+            self.score('right')
         elif self.ball.pos.x + self.ball.size.x > constants.PONG_WIDTH:
             # ball dead player two gains point
-            self.scoreLeft.value += 1
-            self.resetBall()
+            self.score('left')
 
-        super().update(delta)
+        # serve logic
+        if self.ball.serving != None:
+            if self.ball.serving == 'left':
+                self.ball.pos.x = self.batLeft.pos.x + 1
+                self.ball.pos.y = self.batLeft.pos.y + int((self.batLeft.size.y - 1) / 2)
+
+                if self.batLeft.controller.getBottomButton():
+                    self.serve()
+
+            elif self.ball.serving == 'right':
+                self.ball.pos.x = self.batRight.pos.x - 1
+                self.ball.pos.y = self.batRight.pos.y + int((self.batLeft.size.y - 1) / 2)
+
+                if self.batRight.controller.getBottomButton():
+                    self.serve()
+
+        # super().update(delta)
 
     def render(self, delta):
         state = {}

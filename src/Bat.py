@@ -20,9 +20,6 @@ class Bat(GameObject):
             self.increaseSize()
             print('increased Size')
 
-        if self.controller.getBottomButton():
-            print('bottom')
-
     def updatePos(self, controllerPos):
         if controllerPos > self.pos.y:
             self.pos.y += min(self.speed, controllerPos - self.pos.y)

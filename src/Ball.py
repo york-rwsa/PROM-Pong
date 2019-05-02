@@ -10,8 +10,12 @@ class Ball(GameObject):
         self.velocity = Vector.createUnitVector(angle)
         self.collidableObjects = collidableObjects
         self.collision = False
+        self.serving = None
 
     def update(self, timeDiff):
+        if self.serving != None:
+            return
+
         collisionThisUpdate = False
         for obj in self.collidableObjects:
             if self.detectColisionX(obj, timeDiff):
