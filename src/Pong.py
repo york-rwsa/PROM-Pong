@@ -101,7 +101,7 @@ class Pong(Game):
 
             elif self.ball.serving == 'right':
                 self.ball.pos.x = self.batRight.pos.x - 1
-                self.ball.pos.y = self.batRight.pos.y + int((self.batLeft.size.y - 1) / 2)
+                self.ball.pos.y = self.batRight.pos.y + int((self.batRight.size.y - 1) / 2)
 
                 if self.batRight.controller.getBottomButton():
                     self.serve()
