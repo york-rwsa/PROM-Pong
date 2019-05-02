@@ -61,6 +61,13 @@ class TerminalHandler:
         self.setCursorPos(0, 0)
         self.flush()
 
+    def cleanup(self):
+        self.resetColour()
+        self.showCursor()
+        self.clearDisplay()
+        self.setCursorPos(0, 0)
+        self.flush()
+
     def drawPixel(self, x, y, colour):
         self.writeAtXY(self.blankOut, x, y, colour)
 

@@ -10,11 +10,11 @@ import random
 import constants
 import smbus
 import RPi.GPIO as GPIO
-
+from sys import stdout
 
 class Pong(Game):
-    def __init__(self, debug=False):
-        super().__init__(debug)
+    def __init__(self, terminalHandler=stdout, debug=None):
+        super().__init__(terminalHandler, debug)
 
         self.bus = smbus.SMBus(1)
         self.bus.write_byte(constants.BAT_BUTTONS_I2C_ADDRESS, 0xFF)
@@ -83,6 +83,7 @@ class Pong(Game):
 
     def update(self, delta):
         super().update(delta)
+        
         if self.ball.pos.x < 0:
             # ball dead player two gains point
             self.score('right')
@@ -101,7 +102,7 @@ class Pong(Game):
 
             elif self.ball.serving == 'right':
                 self.ball.pos.x = self.batRight.pos.x - 1
-                self.ball.pos.y = self.batRight.pos.y + int((self.batRight.size.y - 1) / 2)
+                self.ball.pos.y = self.batRight.pos.y + int((self.batLeft.size.y - 1) / 2)
 
                 if self.batRight.controller.getBottomButton():
                     self.serve()

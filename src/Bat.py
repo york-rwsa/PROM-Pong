@@ -18,7 +18,6 @@ class Bat(GameObject):
 
         if self.controller.getTopButton():
             self.increaseSize()
-            print('increased Size')
 
     def updatePos(self, controllerPos):
         if controllerPos > self.pos.y:
