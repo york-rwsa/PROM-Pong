@@ -4,7 +4,7 @@ import time
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(10, GPIO.OUT)
+GPIO.setup(9, GPIO.OUT)
 PWM = GPIO.PWM(10,100)
 PWM.start(0)
 PWM.ChangeDutyCycle(90)
