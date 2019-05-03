@@ -48,6 +48,7 @@ class TerminalHandler:
         self.setColour(bgcolour)
 
         self.output.write(string)
+        self.flush()
 
     def initDisplay(self):
         self.resetColour()

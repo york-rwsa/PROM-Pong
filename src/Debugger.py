@@ -20,7 +20,6 @@ class Debugger(TerminalHandler):
             str3
             str4
         """
-
         lines = 0
 
         now = datetime.datetime.now()
@@ -29,7 +28,6 @@ class Debugger(TerminalHandler):
         self.timeSinceLastUpdate = now
 
         lines += 1
-
         for cat in debugArray:
             self.writeAtXY(cat[0] + ':', 0, lines * 2)
             lines += 1

@@ -18,11 +18,12 @@ class Pong(Game):
 
         self.bus = smbus.SMBus(1)
         self.bus.write_byte(constants.BAT_BUTTONS_I2C_ADDRESS, 0xFF)
+        self.bus.write_byte(constants.BALL_LED_I2C_ADDRESS, 0xFF)
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(constants.BAT_BUTTONS_INTERRUPT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(
-            10, GPIO.FALLING, callback=self.handleControllerInterrupt)
+            constants.BAT_BUTTONS_INTERRUPT_PIN, GPIO.FALLING, callback=self.handleControllerInterrupt)
 
         self.scoreLeft = Number(0, 29, 1, "red")
         self.scoreRight = Number(0, 49, 1, "blue")
@@ -55,8 +56,6 @@ class Pong(Game):
 
         self.ball.serving = 'right'
         self.serves = 0
-
-        # self.resetBall()
 
     def resetBall(self):
         self.ball.pos.setxy(40, 12)
@@ -100,6 +99,7 @@ class Pong(Game):
                 if self.batLeft.controller.getBottomButton():
                     self.serve()
 
+
             elif self.ball.serving == 'right':
                 self.ball.pos.x = self.batRight.pos.x - 1
                 self.ball.pos.y = self.batRight.pos.y + int((self.batRight.size.y - 1) / 2)
@@ -107,7 +107,11 @@ class Pong(Game):
                 if self.batRight.controller.getBottomButton():
                     self.serve()
 
-        # super().update(delta)
+        self.writeBallPosToLEDS()
+
+    def writeBallPosToLEDS(self):
+        self.bus.write_byte(constants.BALL_LED_I2C_ADDRESS,
+                            0xFF & ~(1 << int(max(0, round(self.ball.pos.x / 10) - 1))))
 
     def render(self, delta):
         state = {}
@@ -140,3 +144,13 @@ class Pong(Game):
             self.leftController.topButton = True
         if input & constants.LEFT_BAT_BOT_BUTTON == 0:
             self.leftController.bottomButton = True
+
+    def debug(self, delta, output=[]):
+        output = [('Pong', [
+            "Left Controller: {} (raw), ~{:.2f}V".format(self.leftController.lastRawValue,
+                                                     self.leftController.lastScaledValue * 3.2),
+            "Right Controller: {} (raw), ~{:.2f}V".format(self.rightController.lastRawValue,
+                                                      self.rightController.lastScaledValue * 3.2)
+        ])]
+
+        super().debug(delta, output)

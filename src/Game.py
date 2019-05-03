@@ -54,10 +54,12 @@ class Game:
             timer.executeNextTask()
 
     def cleanup(self):
-        if self.debug != None:
-            self.debug.cleanup()
+        if self.debugHandler != None:
+            self.debugHandler.cleanup()
         self.output.cleanup()
 
-    def debug(self, delta):
+    def debug(self, delta, output=[]):
+        output.append(('Game', ["Time since last render: {}".format(delta)]))
+
         if (self.debugHandler != None):
-            self.debugHandler.update([('Game', ["Time since last render: {}".format(delta)])])
+            self.debugHandler.update(output)
