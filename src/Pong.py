@@ -47,7 +47,7 @@ class Pong(Game):
         ]
 
         self.ball = Ball(
-            10, 20, 10, "red", self.edges +
+            10, 20, 20, "red", self.edges +
             [self.batLeft, self.batRight], 25, 1, 1
         )
 
@@ -58,6 +58,7 @@ class Pong(Game):
 
         self.ball.serving = 'right'
         self.serves = 0
+        self.serveAngle = 0
 
     def resetBall(self):
         self.ball.pos.setxy(40, 12)
@@ -74,10 +75,12 @@ class Pong(Game):
         self.rightController.getBottomButton()
 
     def serve(self):
+        self.serveAngle = random.randint(50, 100)
+
         if self.ball.serving == 'left':
-            self.ball.velocity = Vector.createUnitVector(random.randint(30, 150))
+            self.ball.velocity = Vector.createUnitVector(self.serveAngle)
         elif self.ball.serving == 'right':
-            self.ball.velocity = Vector.createUnitVector(-random.randint(30, 150))
+            self.ball.velocity = Vector.createUnitVector(-self.serveAngle)
 
         self.ball.serving = None
         self.serves += 1
@@ -158,7 +161,8 @@ class Pong(Game):
             ]),
             ('Ball', [
                 "Position: x: {:.2f}, y: {:.2f}".format(self.ball.pos.x, self.ball.pos.y),
-                "Ball Angle: {:.2f} degrees".format(self.ball.velocity.arg())
+                "Ball Angle: {:.2f} degrees".format(self.ball.velocity.arg()),
+                "Serve Angle: {:.2f} degrees".format(self.serveAngle)
             ]),
             ('Left Bat', [
                 "Position: y: {:.2f}".format(self.batLeft.pos.y),

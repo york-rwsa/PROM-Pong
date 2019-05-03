@@ -2,11 +2,11 @@ from Pong import Pong
 from SerialHandler import SerialHandler
 from Debugger import Debugger
 
-ser = SerialHandler('/dev/ttyAMA0', 9600)
+ser = SerialHandler('/dev/ttyAMA0', 115200)
 debugger = Debugger()
 
 game = Pong(ser, debugger)
 try:
-    game.start(10, 5)
+    game.start(30, 30)
 except KeyboardInterrupt:
     game.cleanup()
