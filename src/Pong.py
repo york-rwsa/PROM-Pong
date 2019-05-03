@@ -83,7 +83,7 @@ class Pong(Game):
 
     def update(self, delta):
         super().update(delta)
-        
+
         if self.ball.pos.x < 0:
             # ball dead player two gains point
             self.score('right')
@@ -102,7 +102,7 @@ class Pong(Game):
 
             elif self.ball.serving == 'right':
                 self.ball.pos.x = self.batRight.pos.x - 1
-                self.ball.pos.y = self.batRight.pos.y + int((self.batLeft.size.y - 1) / 2)
+                self.ball.pos.y = self.batRight.pos.y + int((self.batRight.size.y - 1) / 2)
 
                 if self.batRight.controller.getBottomButton():
                     self.serve()
