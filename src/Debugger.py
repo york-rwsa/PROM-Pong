@@ -20,18 +20,18 @@ class Debugger(TerminalHandler):
             str3
             str4
         """
-        lines = 0
+        lines = 1
 
         now = datetime.datetime.now()
         diff = now - self.timeSinceLastUpdate
-        self.writeAtXY("Time since last debug update: {}".format(diff.total_seconds()), 0, lines * 2)
+        self.writeAtXY("Time since last debug update: {}".format(diff.total_seconds()), 0, lines)
         self.timeSinceLastUpdate = now
 
         lines += 1
         for cat in debugArray:
-            self.writeAtXY(cat[0] + ':', 0, lines * 2)
+            self.writeAtXY(cat[0] + ':', 0, lines)
             lines += 1
 
             for string in cat[1]:
-                self.writeAtXY('    ' + string, 0, lines * 2)
+                self.writeAtXY('    ' + string, 0, lines)
                 lines += 1

@@ -25,9 +25,17 @@ class Vector:
     def mag(self):
         return (self.x ** 2 + self.y ** 2) ** 0.5
 
+    def arg(self):
+        """ returns in degrees
+        """
+        return math.atan(self.y / self.x) * 180 / math.pi
+
     def unit_vector(self):
         return self / self.mag()
 
     @staticmethod
     def createUnitVector(angle):
+        """ angle in degrees
+        """
+        radians = angle * math.pi / 180
         return Vector(math.cos(angle), math.sin(angle))

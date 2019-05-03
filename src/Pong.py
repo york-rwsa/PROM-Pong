@@ -20,6 +20,8 @@ class Pong(Game):
         self.bus.write_byte(constants.BAT_BUTTONS_I2C_ADDRESS, 0xFF)
         self.bus.write_byte(constants.BALL_LED_I2C_ADDRESS, 0xFF)
 
+        self.batButtonState = 0xFF
+
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(constants.BAT_BUTTONS_INTERRUPT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(
@@ -131,6 +133,7 @@ class Pong(Game):
 
     def handleControllerInterrupt(self, channel):
         input = self.bus.read_byte(constants.BAT_BUTTONS_I2C_ADDRESS)
+        self.batButtonState = input
 
         if input == 255:
             return
@@ -146,11 +149,30 @@ class Pong(Game):
             self.leftController.bottomButton = True
 
     def debug(self, delta, output=[]):
-        output = [('Pong', [
-            "Left Controller: {} (raw), ~{:.2f}V".format(self.leftController.lastRawValue,
-                                                     self.leftController.lastScaledValue * 3.2),
-            "Right Controller: {} (raw), ~{:.2f}V".format(self.rightController.lastRawValue,
-                                                      self.rightController.lastScaledValue * 3.2)
-        ])]
+        output = [
+            ('Pong', [
+                "Left Controller: {} (raw), ~{:.2f}V".format(self.leftController.lastRawValue,
+                                                         self.leftController.lastScaledValue * 3.2),
+                "Right Controller: {} (raw), ~{:.2f}V".format(self.rightController.lastRawValue,
+                                                          self.rightController.lastScaledValue * 3.2)
+            ]),
+            ('Ball', [
+                "Position: x: {:.2f}, y: {:.2f}".format(self.ball.pos.x, self.ball.pos.y),
+                "Ball Angle: {:.2f} degrees".format(self.ball.velocity.arg())
+            ]),
+            ('Left Bat', [
+                "Position: y: {:.2f}".format(self.batLeft.pos.y),
+                "Size increases left: {}".format(self.batLeft.sizeIncreasesLeft),
+                "Top button: {}, Bottom button: {}".format(self.batButtonState & constants.LEFT_BAT_TOP_BUTTON == 0,
+                                                           self.batButtonState & constants.LEFT_BAT_BOT_BUTTON == 0)
+            ]),
+            ('Right Bat', [
+                "Position: y: {:.2f}".format(self.batRight.pos.y),
+                "Size increases left: {}".format(self.batRight.sizeIncreasesLeft),
+                "Top button: {}, Bottom button: {}".format(self.batButtonState & constants.RIGHT_BAT_TOP_BUTTON == 0,
+                                                           self.batButtonState & constants.RIGHT_BAT_BOT_BUTTON == 0)
+
+            ])
+        ]
 
         super().debug(delta, output)
