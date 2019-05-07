@@ -9,6 +9,7 @@ from ControllerHandler import ControllerHandler
 import random
 import constants
 import smbus
+import lights.LightFX as pointGlow
 import RPi.GPIO as GPIO
 from sys import stdout
 
@@ -27,8 +28,8 @@ class Pong(Game):
         GPIO.add_event_detect(
             constants.BAT_BUTTONS_INTERRUPT_PIN, GPIO.FALLING, callback=self.handleControllerInterrupt)
 
-        self.scoreLeft = Number(0, 29, 1, "red")
-        self.scoreRight = Number(0, 49, 1, "blue")
+        self.scoreLeft = Number(0, 29, 2, "cyan")
+        self.scoreRight = Number(0, 49, 2, "pink")
 
         self.leftController = ControllerHandler(
             self.bus, constants.LEFT_BAT_I2C_ADDRESS, constants.LEFT_BAT_CMD_CODE
@@ -37,17 +38,18 @@ class Pong(Game):
             self.bus, constants.RIGHT_BAT_I2C_ADDRESS, constants.RIGHT_BAT_CMD_CODE
         )
 
-        self.batLeft = Bat(3, 12, 6, "red", self.leftController)
-        self.batRight = Bat(77, 12, -6, "blue", self.rightController)
+        self.batLeft = Bat(3, 12, 6, "cyan", self.leftController)
+        self.batRight = Bat(77, 12, -6, "pink", self.rightController)
 
         self.edges = [
             GameObject(0, -1, constants.PONG_WIDTH, 1, "reset"),
+            #deleted the "+1" that followed constants.PONG_HEIGHT
             GameObject(0, constants.PONG_HEIGHT + 1,
                        constants.PONG_WIDTH, 1, "reset"),
         ]
 
         self.ball = Ball(
-            10, 20, 20, "red", self.edges +
+            10, 20, 20, "green", self.edges +
             [self.batLeft, self.batRight], 25, 1, 1
         )
 
@@ -65,6 +67,7 @@ class Pong(Game):
         self.ball.velocity = Vector.createUnitVector(random.randint(0, 360))
 
     def score(self, scorer):
+        pointGlow.pointWon()
         if scorer == 'left':
             self.scoreLeft.value += 1
         elif scorer == 'right':
@@ -123,7 +126,7 @@ class Pong(Game):
         # render net
         state.update(
             {
-                (40, y): "blue"
+                (40, y): "yellow"
                 for (y, draw) in zip(
                     range(constants.PONG_HEIGHT), cycle(
                         [False, False, True, True])

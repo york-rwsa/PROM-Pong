@@ -1,4 +1,4 @@
-from PyGlow import PyGlow
+from lights.PyGlow import PyGlow
 from time import sleep
 
 pyglow = PyGlow(speed = 1000) #max brightness 255
@@ -15,8 +15,9 @@ def pointWon():
             pyglow.color(c, i)
     for c in colors:
          for i in range(brightness, -1, -speed2):
-        pyglow.color(c, i)
+             pyglow.color(c, i)
 
+pointWon()
 '''
 RED = [1,7,13]
 ORANGE = [2,8,14]

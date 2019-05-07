@@ -7,6 +7,6 @@ debugger = Debugger()
 
 game = Pong(ser, debugger)
 try:
-    game.start(30, 30)
+    game.start(32, 30)
 except KeyboardInterrupt:
     game.cleanup()
