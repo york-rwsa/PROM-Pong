@@ -5,8 +5,8 @@ pyglow = PyGlow(speed = 1000) #max brightness 255
 pyglow.all(0) #reset LEDs
 
 brightness = 150
-speed = 10
-speed2 = 5
+speed = 5
+speed2 = 2
 colors = ["white", "blue", "green", "yellow", "orange", "red"]
 
 def pointWon():
@@ -17,7 +17,6 @@ def pointWon():
          for i in range(brightness, -1, -speed2):
              pyglow.color(c, i)
 
-pointWon()
 '''
 RED = [1,7,13]
 ORANGE = [2,8,14]

@@ -42,14 +42,14 @@ class Pong(Game):
         self.batRight = Bat(77, 12, -6, "pink", self.rightController)
 
         self.edges = [
-            GameObject(0, -1, constants.PONG_WIDTH, 1, "reset"),
+            GameObject(0, -1, constants.PONG_WIDTH, 1, "red"),
             #deleted the "+1" that followed constants.PONG_HEIGHT
             GameObject(0, constants.PONG_HEIGHT + 1,
-                       constants.PONG_WIDTH, 1, "reset"),
+                       constants.PONG_WIDTH, 1, "red"),
         ]
 
         self.ball = Ball(
-            10, 20, 20, "green", self.edges +
+            10, 20, 25, "green", self.edges +
             [self.batLeft, self.batRight], 25, 1, 1
         )
 
@@ -61,10 +61,6 @@ class Pong(Game):
         self.ball.serving = 'right'
         self.serves = 0
         self.serveAngle = 0
-
-    def resetBall(self):
-        self.ball.pos.setxy(40, 12)
-        self.ball.velocity = Vector.createUnitVector(random.randint(0, 360))
 
     def score(self, scorer):
         pointGlow.pointWon()
@@ -81,9 +77,9 @@ class Pong(Game):
         self.serveAngle = random.randint(50, 100)
 
         if self.ball.serving == 'left':
-            self.ball.velocity = Vector.createUnitVector(self.serveAngle)
+            self.ball.velocity = Vector.createUnitVector(1, 1)
         elif self.ball.serving == 'right':
-            self.ball.velocity = Vector.createUnitVector(-self.serveAngle)
+            self.ball.velocity = Vector.createUnitVector(-1, 1)
 
         self.ball.serving = None
         self.serves += 1

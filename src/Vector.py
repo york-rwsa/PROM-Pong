@@ -34,8 +34,12 @@ class Vector:
         return self / self.mag()
 
     @staticmethod
-    def createUnitVector(angle):
+    def createUnitVectorFromAngle(angle):
         """ angle in degrees
         """
         radians = angle * math.pi / 180
         return Vector(math.cos(angle), math.sin(angle))
+
+    @staticmethod
+    def createUnitVector(x, y):
+        return (Vector(x, y)).unit_vector()

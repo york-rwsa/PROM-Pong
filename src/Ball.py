@@ -1,4 +1,5 @@
 import constants
+import random
 from Vector import Vector
 from GameObject import GameObject
 
@@ -22,11 +23,13 @@ class Ball(GameObject):
                 if not self.collision:
                     self.velocity.x *= -1
                 collisionThisUpdate = True
+                
 
             if self.detectColisionY(obj, timeDiff):
                 if not self.collision:
                     self.velocity.y *= -1
                 collisionThisUpdate = True
+
 
         self.collision = collisionThisUpdate
 
