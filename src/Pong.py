@@ -94,6 +94,15 @@ class Pong(Game):
             # ball dead player two gains point
             self.score('left')
 
+        # check ball is still in region
+        # abs means absolute (+ve) value, ie abs(-19) == abs(19) == 19
+        if self.ball.pos.y < 0:
+            self.ball.pos.y = 0
+            self.ball.velocity.y = abs(self.ball.velocity.y)
+        elif self.ball.pos.y > 24:
+            self.ball.pos.y = 24
+            self.ball.velocity.y = -abs(self.ball.velocity.y)
+
         # serve logic
         if self.ball.serving != None:
             if self.ball.serving == 'left':
