@@ -1,17 +1,39 @@
+import constants
+
 class ControllerHandler:
-    def __init__(self, bus, adcAddress, adcCmdCode):
+    def __init__(self, bus, adcAddress):
         self.bus = bus
         self.address = adcAddress
-        self.adcCmdCode = adcCmdCode
 
         self.topButton = False
         self.bottomButton = False
 
         self.lastRawValue = 0
         self.lastScaledValue = 0
+        self.lastRealValue = 0
 
     def getPositionPercent(self):
         return self.readAdc()
+
+    def readAdc(self):
+        raise NotImplementedError
+
+    def getTopButton(self):
+        tmp = self.topButton
+        self.topButton = False
+
+        return tmp
+
+    def getBottomButton(self):
+        tmp = self.bottomButton
+        self.bottomButton = False
+
+        return tmp
+
+class OnBoardADCHandler(ControllerHandler):
+    def __init__(self, bus, adcAddress, adcCmdCode):
+        super().__init__(bus, adcAddress)
+        self.adcCmdCode = adcCmdCode
 
     def readAdc(self):
         self.bus.write_byte(self.address, self.adcCmdCode)
@@ -25,14 +47,19 @@ class ControllerHandler:
 
         return scaledValue
 
-    def getTopButton(self):
-        tmp = self.topButton
-        self.topButton = False
+class CPLDHandler(ControllerHandler):
+    def __init__(self, bus, adcAddress):
+        super().__init__(bus, adcAddress)
 
-        return tmp
+        self.bus.write_byte(self.address, 0xFF)
 
-    def getBottomButton(self):
-        tmp = self.bottomButton
-        self.bottomButton = False
+    def readAdc(self):
+        # this is a 7 bit adc, hence masking msb
+        tmp = self.bus.read_byte(self.address) & 0x7F
+        scaledValue = tmp / constants.CPLD_MAX_RANGE
 
-        return tmp
+        self.lastRawValue = tmp
+        self.lastScaledValue = scaledValue
+        self.lastRealValue = scaledValue * constants.CPLD_VOLTAGE_AT_MAX
+
+        return scaledValue

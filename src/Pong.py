@@ -5,7 +5,7 @@ from Ball import Ball
 from Bat import Bat
 from Vector import Vector
 from itertools import cycle
-from ControllerHandler import ControllerHandler
+from ControllerHandler import OnBoardADCHandler, CPLDHandler
 import random
 import constants
 import smbus
@@ -31,12 +31,10 @@ class Pong(Game):
         self.scoreLeft = Number(0, 29, 2, "cyan")
         self.scoreRight = Number(0, 49, 2, "pink")
 
-        self.leftController = ControllerHandler(
-            self.bus, constants.LEFT_BAT_I2C_ADDRESS, constants.LEFT_BAT_CMD_CODE
+        self.leftController = CPLDHandler(
+            self.bus, constants.LEFT_BAT_I2C_ADDRESS
         )
-        self.rightController = ControllerHandler(
-            self.bus, constants.RIGHT_BAT_I2C_ADDRESS, constants.RIGHT_BAT_CMD_CODE
-        )
+        self.rightController = OnBoardADCHandler(self.bus, constants.RIGHT_BAT_I2C_ADDRESS, constants.RIGHT_BAT_CMD_CODE)
 
         self.batLeft = Bat(3, 12, 6, "cyan", self.leftController)
         self.batRight = Bat(77, 12, -6, "pink", self.rightController)
@@ -176,14 +174,15 @@ class Pong(Game):
                 "Position: y: {:.2f}".format(self.batLeft.pos.y),
                 "Size increases left: {}".format(self.batLeft.sizeIncreasesLeft),
                 "Top button: {}, Bottom button: {}".format(self.batButtonState & constants.LEFT_BAT_TOP_BUTTON == 0,
-                                                           self.batButtonState & constants.LEFT_BAT_BOT_BUTTON == 0)
+                                                           self.batButtonState & constants.LEFT_BAT_BOT_BUTTON == 0),
+                "Handler: {}".format(self.leftController.__class__.__name__)
             ]),
             ('Right Bat', [
                 "Position: y: {:.2f}".format(self.batRight.pos.y),
                 "Size increases left: {}".format(self.batRight.sizeIncreasesLeft),
                 "Top button: {}, Bottom button: {}".format(self.batButtonState & constants.RIGHT_BAT_TOP_BUTTON == 0,
-                                                           self.batButtonState & constants.RIGHT_BAT_BOT_BUTTON == 0)
-
+                                                           self.batButtonState & constants.RIGHT_BAT_BOT_BUTTON == 0),
+                "Handler: {}".format(self.rightController.__class__.__name__)
             ])
         ]
 
