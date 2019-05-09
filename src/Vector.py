@@ -16,7 +16,9 @@ class Vector:
     def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
 
-    def __div__(self, divisor):
+    # __truediv__ overrides /, ie 5/2 == 2.5
+    # __floordiv__ overrides //, ie 5//2 == 2 (integer division)
+    def __truediv__(self, divisor):
         return Vector(self.x / divisor, self.y / divisor)
 
     def __mul__(self, multiplier):

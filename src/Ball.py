@@ -8,7 +8,7 @@ class Ball(GameObject):
     def __init__(self, x, starty, speed, colour, collidableObjects=[], angle=45, width=3, height=2):
         super().__init__(x, starty, width, height, colour)
         self.speed = speed
-        self.velocity = Vector.createUnitVector(angle)
+        self.velocity = Vector.createUnitVectorFromAngle(angle)
         self.collidableObjects = collidableObjects
         self.collision = False
         self.serving = None
@@ -23,7 +23,7 @@ class Ball(GameObject):
                 if not self.collision:
                     self.velocity.x *= -1
                 collisionThisUpdate = True
-                
+
 
             if self.detectColisionY(obj, timeDiff):
                 if not self.collision:
