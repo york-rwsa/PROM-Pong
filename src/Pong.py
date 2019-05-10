@@ -1,3 +1,4 @@
+from Word import Word
 from Game import Game
 from GameObject import GameObject
 from Number import Number
@@ -63,6 +64,9 @@ class Pong(Game):
         self.ball.serving = 'right'
         self.serves = 0
 
+        self.gameOver = False
+        self.winnerText = None
+
     def score(self, scorer):
         pointGlow.asyncStart()
         if scorer == 'left':
@@ -74,6 +78,13 @@ class Pong(Game):
         self.leftController.getBottomButton()
         self.rightController.getBottomButton()
 
+        if self.scoreLeft.value >= constants.WIN_POINT_COUNT:
+            self.gameOver = True
+            self.winnerText = Word("PLAYER 1 WINS!", 12, 10, "red")
+        elif self.scoreRight.value >= constants.WIN_POINT_COUNT:
+            self.gameOver = True
+            self.winnerText = Word("PLAYER 2 WINS!", 12, 10, "red")
+
     def serve(self):
         if self.ball.serving == 'left':
             self.ball.velocity = Vector.createUnitVector(1, 1)
@@ -84,6 +95,9 @@ class Pong(Game):
         self.serves += 1
 
     def update(self, delta):
+        if (self.gameOver):
+            return
+
         super().update(delta)
 
         if self.ball.pos.x < 0:
@@ -134,6 +148,10 @@ class Pong(Game):
         self.lastLED = led
 
     def render(self, delta):
+        if self.gameOver:
+            self.output.writeState(self.winnerText.render())
+            return
+
         state = {}
         # render net
         state.update(
