@@ -31,7 +31,23 @@ class Ball(GameObject):
         for obj in self.collidableObjects:
             if self.detectColisionX(obj, timeDiff):
                 if not self.collision:
-                    self.velocity.x *= -1
+                    if constants.DIFFERENT_TRAJECTORIES:
+                        third = obj.size.y / 3
+                        xDirection = self.velocity.x / abs(self.velocity.x) * -1
+                        # top third
+                        if self.pos.y < obj.pos.y + third and self.pos.y >= obj.pos.y:
+                            # difflect up
+                            self.velocity = Vector(1 * xDirection, -1).unit_vector()
+                        elif self.pos.y < obj.pos.y + third * 2 and self.pos.y >= obj.pos.y + third:
+                            # deflect straight
+                            self.velocity = Vector(1 * xDirection, 0).unit_vector()
+                        elif self.pos.y < obj.pos.y + third * 3 and self.pos.y >= obj.pos.y + third * 2:
+                            # difflect down
+                            self.velocity = Vector(1 * xDirection, 1).unit_vector()
+
+                    else:
+                        self.velocity.x *= -1
+
                 collisionThisUpdate = True
 
 
