@@ -2,7 +2,7 @@ import constants
 import random
 from Vector import Vector
 from GameObject import GameObject
-
+from sound import sound
 
 class Ball(GameObject):
     def __init__(self, x, starty, speed, colour, collidableObjects=[], angle=45, width=3, height=2):
@@ -12,12 +12,22 @@ class Ball(GameObject):
         self.collidableObjects = collidableObjects
         self.collision = False
         self.serving = None
+        self.sfx = sound.Sound(constants.MUSIC_SFX_PIN)
 
     def update(self, timeDiff):
         if self.serving != None:
             return
 
+        self.collision = self.handleCollisions(timeDiff)
+
+        if self.collision:
+            self.sfx.asyncPlayTone(constants.MUSIC_SFX_DELAY, constants.MUSIC_SFX_FREQ)
+
+        self.pos += self.velocity * self.speed * timeDiff
+
+    def handleCollisions(self, timeDiff):
         collisionThisUpdate = False
+
         for obj in self.collidableObjects:
             if self.detectColisionX(obj, timeDiff):
                 if not self.collision:
@@ -30,10 +40,7 @@ class Ball(GameObject):
                     self.velocity.y *= -1
                 collisionThisUpdate = True
 
-
-        self.collision = collisionThisUpdate
-
-        self.pos += self.velocity * self.speed * timeDiff
+        return collisionThisUpdate
 
     def nextPos(self, timeDiff):
         return self.pos + self.velocity * self.speed * timeDiff

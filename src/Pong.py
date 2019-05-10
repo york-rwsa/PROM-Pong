@@ -61,7 +61,7 @@ class Pong(Game):
         self.serveAngle = 0
 
     def score(self, scorer):
-        pointGlow.pointWon()
+        pointGlow.asyncStart()
         if scorer == 'left':
             self.scoreLeft.value += 1
         elif scorer == 'right':

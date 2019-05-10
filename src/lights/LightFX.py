@@ -1,11 +1,12 @@
 from lights.PyGlow import PyGlow
 from time import sleep
+from threading import Thread
 
 pyglow = PyGlow(speed = 1000) #max brightness 255
 pyglow.all(0) #reset LEDs
 
 brightness = 150
-speed = 5
+speed = 10
 speed2 = 2
 colors = ["white", "blue", "green", "yellow", "orange", "red"]
 
@@ -16,6 +17,10 @@ def pointWon():
     for c in colors:
          for i in range(brightness, -1, -speed2):
              pyglow.color(c, i)
+
+def asyncStart():
+    t = Thread(target=pointWon)
+    t.start()
 
 '''
 RED = [1,7,13]
