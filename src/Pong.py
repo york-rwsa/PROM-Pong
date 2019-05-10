@@ -62,7 +62,6 @@ class Pong(Game):
 
         self.ball.serving = 'right'
         self.serves = 0
-        self.serveAngle = 0
 
     def score(self, scorer):
         pointGlow.asyncStart()
@@ -71,13 +70,11 @@ class Pong(Game):
         elif scorer == 'right':
             self.scoreRight.value += 1
 
-        self.ball.serving = 'right' if (self.serves < 5) else 'left'
+        self.ball.serving = 'left' if (self.serves // 5 % 2) else 'right'
         self.leftController.getBottomButton()
         self.rightController.getBottomButton()
 
     def serve(self):
-        self.serveAngle = random.randint(50, 100)
-
         if self.ball.serving == 'left':
             self.ball.velocity = Vector.createUnitVector(1, 1)
         elif self.ball.serving == 'right':
@@ -184,7 +181,7 @@ class Pong(Game):
             ('Ball', [
                 "Position: x: {:.2f}, y: {:.2f}".format(self.ball.pos.x, self.ball.pos.y),
                 "Ball Angle: {:.2f} degrees".format(self.ball.velocity.arg()),
-                "Serve Angle: {:.2f} degrees".format(self.serveAngle)
+                "Ball Trajectory: x: {:.2f}, y: {:.2f}".format(self.ball.velocity.x, self.ball.velocity.y)
             ]),
             ('Left Bat', [
                 "Position: y: {:.2f}".format(self.batLeft.pos.y),
