@@ -52,7 +52,7 @@ class Pong(Game):
         ]
 
         self.ball = Ball(
-            10, 20, 25, "green", self.edges +
+            10, 20, constants.SERVE_SPEED, "green", self.edges +
             [self.batLeft, self.batRight], 25, 1, 1
         )
 
@@ -84,6 +84,8 @@ class Pong(Game):
         elif self.scoreRight.value >= constants.WIN_POINT_COUNT:
             self.gameOver = True
             self.winnerText = Word("PLAYER 2 WINS!", 12, 10, "red")
+
+        self.ball.speed = constants.SERVE_SPEED
 
     def serve(self):
         if self.ball.serving == 'left':
@@ -198,8 +200,9 @@ class Pong(Game):
             ]),
             ('Ball', [
                 "Position: x: {:.2f}, y: {:.2f}".format(self.ball.pos.x, self.ball.pos.y),
-                "Ball Angle: {:.2f} degrees".format(self.ball.velocity.arg()),
-                "Ball Trajectory: x: {:.2f}, y: {:.2f}".format(self.ball.velocity.x, self.ball.velocity.y)
+                "Angle: {:.2f} degrees".format(self.ball.velocity.arg()),
+                "Trajectory: x: {:.2f}, y: {:.2f}".format(self.ball.velocity.x, self.ball.velocity.y),
+                "Speed: {}".format(self.ball.speed)
             ]),
             ('Left Bat', [
                 "Position: y: {:.2f}".format(self.batLeft.pos.y),

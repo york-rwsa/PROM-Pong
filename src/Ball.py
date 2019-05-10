@@ -44,9 +44,11 @@ class Ball(GameObject):
                         elif self.pos.y < obj.pos.y + third * 3 and self.pos.y >= obj.pos.y + third * 2:
                             # difflect down
                             self.velocity = Vector(1 * xDirection, 1).unit_vector()
-
                     else:
                         self.velocity.x *= -1
+
+                    if constants.RANDOM_SPEEDS:
+                        self.speed = random.choice(constants.RANDOM_SPEED_VALUES)
 
                 collisionThisUpdate = True
 
