@@ -29,12 +29,16 @@ class Sound:
     def playMusic(self, onDutyCycle):
         self.pwm.start(0)
 
+        octave = 1
+
         while True:
             for i, tone in enumerate(self.highTones):
-                self.pwm.ChangeFrequency(tone * 2)
+                self.pwm.ChangeFrequency(tone * 2 * octave)
                 self.pwm.ChangeDutyCycle(onDutyCycle)
                 time.sleep(0.2)
                 self.pwm.ChangeDutyCycle(100)
+
+            octave = octave + 1 if octave < 2 else 1
 
     def asyncPlayTone(self, seconds, freq=100, dc=50):
         if self.process is None or not self.process.is_alive():
