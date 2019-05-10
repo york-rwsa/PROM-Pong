@@ -28,6 +28,10 @@ class Pong(Game):
         GPIO.add_event_detect(
             constants.BAT_BUTTONS_INTERRUPT_PIN, GPIO.FALLING, callback=self.handleControllerInterrupt)
 
+        for pin in constants.LED_PINS:
+            GPIO.setup(pin, GPIO.OUT)
+        self.lastLED = None
+
         self.scoreLeft = Number(0, 29, 2, "cyan")
         self.scoreRight = Number(0, 49, 2, "pink")
 
@@ -121,8 +125,16 @@ class Pong(Game):
         self.writeBallPosToLEDS()
 
     def writeBallPosToLEDS(self):
-        self.bus.write_byte(constants.BALL_LED_I2C_ADDRESS,
-                            0xFF & ~(1 << int(max(0, round(self.ball.pos.x / 10) - 1))))
+        led = int(max(0, round(self.ball.pos.x / 10) - 1))
+
+        if self.lastLED != led:
+            if self.lastLED is not None:
+                GPIO.output(constants.LED_PINS[self.lastLED], GPIO.LOW)
+            GPIO.output(constants.LED_PINS[led], GPIO.HIGH)
+
+            self.bus.write_byte(constants.BALL_LED_I2C_ADDRESS, 0xFF & ~(1 << led))
+
+        self.lastLED = led
 
     def render(self, delta):
         state = {}
