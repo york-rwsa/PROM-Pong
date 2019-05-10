@@ -9,11 +9,22 @@ class ControllerHandler:
         self.bottomButton = False
 
         self.lastRawValue = 0
+
+        self.rawValue = 0
+        self.scaledValue = 0
+
         self.lastScaledValue = 0
         self.lastRealValue = 0
 
+        self.alpha = constants.CONTROLLER_ALPHA
+
     def getPositionPercent(self):
-        return self.readAdc()
+        self.readAdc()
+
+        self.rawValue = self.alpha * self.lastRawValue + (1 - self.alpha) * self.lastRawValue
+        self.scaledValue = self.alpha * self.lastScaledValue + (1 - self.alpha) * self.lastScaledValue
+
+        return self.scaledValue
 
     def readAdc(self):
         raise NotImplementedError

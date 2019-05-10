@@ -172,10 +172,14 @@ class Pong(Game):
     def debug(self, delta, output=[]):
         output = [
             ('Pong', [
-                "Left Controller: {} (raw), ~{:.2f}V".format(self.leftController.lastRawValue,
-                                                         self.leftController.lastScaledValue * 3.2),
-                "Right Controller: {} (raw), ~{:.2f}V".format(self.rightController.lastRawValue,
-                                                          self.rightController.lastScaledValue * 3.2)
+                "Left Controller: {} (raw), ~{:.2f}V".format(
+                    self.leftController.rawValue,
+                    self.leftController.lastScaledValue * constants.CPLD_VOLTAGE_AT_MAX
+                ),
+                "Right Controller: {} (raw), ~{:.2f}V".format(
+                    self.rightController.rawValue,
+                    self.rightController.lastScaledValue * 3.2
+                )
             ]),
             ('Ball', [
                 "Position: x: {:.2f}, y: {:.2f}".format(self.ball.pos.x, self.ball.pos.y),
