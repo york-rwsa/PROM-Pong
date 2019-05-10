@@ -25,4 +25,5 @@ try:
     s.asyncPlayMusic()
     game.start(32, 30)
 except KeyboardInterrupt:
+    s.cleanup()
     game.cleanup()
